@@ -1,0 +1,130 @@
+/* =======================
+   Common Table Styling
+======================= */
+
+.attendance-table-container,
+.client-table-container {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.attendance-table-container:hover,
+.client-table-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* =======================
+   Table Header
+======================= */
+
+.header-cell {
+  font-weight: 600 !important;
+  background-color: #e8f5e9 !important;
+  color: #2e7d32 !important;
+  text-transform: uppercase;
+  font-size: 0.85rem !important;
+}
+
+/* =======================
+   Table Rows
+======================= */
+
+.table-row:hover {
+  background-color: #f1f8e9 !important;
+  transition: background-color 0.2s ease;
+}
+
+.client-name {
+  font-weight: 500;
+  color: #1b5e20;
+}
+
+/* =======================
+   Totals
+======================= */
+
+.total-row {
+  background-color: #f9fbe7 !important;
+  font-weight: 600;
+}
+
+.total-label {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.total-value {
+  color: #1b5e20;
+  font-weight: 700;
+}
+
+/* =======================
+   Table Layout
+======================= */
+
+.attendance-table,
+.client-table {
+  width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
+
+/* === APP CONTAINER === */
+.app-container {
+  padding: 2rem 0;
+  font-family: "Inter", sans-serif;
+}
+
+/* === HEADER === */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  color: #1b5e20;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.week-range {
+  color: #4caf50;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+/* === WEEK BUTTONS === */
+.week-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.week-button {
+  background-color: #4caf50 !important;
+  color: white !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 0.5rem 1.2rem !important;
+  border-radius: 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+.week-button:hover {
+  background-color: #388e3c !important;
+  transform: translateY(-1px);
+}
+
+.week-button.prev {
+  background-color: #81c784 !important;
+}
+
+.week-button.prev:hover {
+  background-color: #66bb6a !important;
+}
+

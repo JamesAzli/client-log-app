@@ -1,56 +1,111 @@
-// src/App.jsx
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Box, Paper } from "@mui/material";
-import ClientForm from "./components/ClientForm";
-import ClientList from "./components/ClientList";
-import DateRangeCalculator from "./components/DateRangeCalculator";
-import localforage from "localforage";
-import "./styles.css";
+import { Button, Typography, Container, Box } from "@mui/material";
+import dayjs from "dayjs";
+import defaultClients from "./data/defaultClients";
+import ClientAttendanceTable from "./components/ClientAttendanceTable";
+import ClientTable from "./components/ClientTable";
+import "./components/ClientTable.css";
 
 const App = () => {
-  const [clients, setClients] = useState([]);
+  const [currentWeek, setCurrentWeek] = useState(dayjs());
+  const [attendanceByWeek, setAttendanceByWeek] = useState({});
+  const [clients, setClients] = useState(defaultClients);
+  const [totalFees, setTotalFees] = useState(0);
 
-  // Load from local storage
-  useEffect(() => {
-    localforage.getItem("clients").then((savedClients) => {
-      if (savedClients) setClients(savedClients);
+  // Helper function to compute fee per client based on attendance
+  const calculateFees = (clientList) => {
+    const updatedClients = clientList.map((client) => {
+      const attendedCount = client.schedules.filter((s) => s.attended).length;
+      const feePerSession =
+        client.type.toUpperCase() === "ABA" ? 270 : client.type === "2IN1" ? 360 : 0;
+      const total = attendedCount * feePerSession;
+      return { ...client, fee: total };
     });
-  }, []);
 
-  // Save to local storage
+    const grandTotal = updatedClients.reduce((acc, c) => acc + c.fee, 0);
+    setTotalFees(grandTotal);
+    return updatedClients;
+  };
+
+  // Load attendance data for the selected week
   useEffect(() => {
-    localforage.setItem("clients", clients);
-  }, [clients]);
+    const weekKey = currentWeek.startOf("week").format("YYYY-MM-DD");
+    const storedWeek = attendanceByWeek[weekKey];
+    if (storedWeek) {
+      setClients(calculateFees(storedWeek));
+    } else {
+      // Reset attendance for new week
+      const resetClients = defaultClients.map((client) => ({
+        ...client,
+        schedules: client.schedules.map((s) => ({ ...s, attended: false })),
+      }));
+      setClients(calculateFees(resetClients));
+    }
+  }, [currentWeek, attendanceByWeek]);
 
-  const addClient = (client) => {
-    setClients([...clients, client]);
+  // Toggle attendance for a given client/day
+  const handleToggleAttendance = (clientId, day) => {
+    const updated = clients.map((client) => {
+      if (client.id === clientId) {
+        const updatedSchedules = client.schedules.map((s) =>
+          s.day === day ? { ...s, attended: !s.attended } : s
+        );
+        return { ...client, schedules: updatedSchedules };
+      }
+      return client;
+    });
+
+    const recalculated = calculateFees(updated);
+    const weekKey = currentWeek.startOf("week").format("YYYY-MM-DD");
+    setAttendanceByWeek({ ...attendanceByWeek, [weekKey]: recalculated });
+    setClients(recalculated);
   };
 
-  const updateClient = (updatedClient) => {
-    setClients(clients.map((c) => (c.id === updatedClient.id ? updatedClient : c)));
-  };
+  // Week navigation
+  const goToPreviousWeek = () => setCurrentWeek(currentWeek.subtract(1, "week"));
+  const goToNextWeek = () => setCurrentWeek(currentWeek.add(1, "week"));
 
-  const deleteClient = (id) => {
-    setClients(clients.filter((c) => c.id !== id));
-  };
+  // Display range for current week
+  const startOfWeek = currentWeek.startOf("week").add(1, "day");
+  const endOfWeek = currentWeek.endOf("week").add(1, "day");
 
   return (
-    <Container maxWidth="md" sx={{ py: 3 }}>
-      <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
-        <Typography variant="h5" gutterBottom align="center">
-          🗓️ Client Log Tracker
+    <Container maxWidth="lg" className="app-container">
+      <Box className="header">
+        <Typography variant="h4" className="title">
+          Client Attendance Log
+        </Typography>
+        <Typography variant="h6" className="week-range">
+          Week of {startOfWeek.format("MMM D")} – {endOfWeek.format("MMM D, YYYY")}
         </Typography>
 
-        <ClientForm addClient={addClient} />
-
-        <Box mt={4}>
-          <ClientList clients={clients} updateClient={updateClient} deleteClient={deleteClient} />
+        <Box className="week-buttons">
+          <Button
+            variant="contained"
+            className="week-button prev"
+            onClick={goToPreviousWeek}
+          >
+            ← Previous Week
+          </Button>
+          <Button
+            variant="contained"
+            className="week-button next"
+            onClick={goToNextWeek}
+          >
+            Next Week →
+          </Button>
         </Box>
+      </Box>
 
-        <Box mt={4}>
-          <DateRangeCalculator clients={clients} />
-        </Box>
-      </Paper>
+      {/* Attendance Table */}
+      <ClientAttendanceTable
+        clients={clients}
+        onToggleAttendance={handleToggleAttendance}
+        currentWeek={currentWeek}
+      />
+
+      {/* Fee Summary Table */}
+      <ClientTable clients={clients} totalFees={totalFees} />
     </Container>
   );
 };
