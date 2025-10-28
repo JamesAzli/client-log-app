@@ -8,13 +8,13 @@
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(173, 136, 198, 0.2);
   transition: all 0.3s ease;
 }
 
 .attendance-table-container:hover,
 .client-table-container:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(116, 105, 182, 0.3);
 }
 
 /* =======================
@@ -23,8 +23,8 @@
 
 .header-cell {
   font-weight: 600 !important;
-  background-color: #e8f5e9 !important;
-  color: #2e7d32 !important;
+  background-color: #e1afd1 !important; /* lavender */
+  color: #4b3f72 !important; /* dark violet text */
   text-transform: uppercase;
   font-size: 0.85rem !important;
 }
@@ -34,13 +34,13 @@
 ======================= */
 
 .table-row:hover {
-  background-color: #f1f8e9 !important;
-  transition: background-color 0.2s ease;
+  background-color: #ffe6e6 !important; /* soft pink hover */
+  transition: background-color 0.25s ease;
 }
 
 .client-name {
   font-weight: 500;
-  color: #1b5e20;
+  color: #7469b6; /* violet name text */
 }
 
 /* =======================
@@ -48,17 +48,17 @@
 ======================= */
 
 .total-row {
-  background-color: #f9fbe7 !important;
+  background-color: #f4e2f3 !important; /* light lavender-pink */
   font-weight: 600;
 }
 
 .total-label {
-  color: #2e7d32;
+  color: #ad88c6;
   font-weight: 600;
 }
 
 .total-value {
-  color: #1b5e20;
+  color: #7469b6;
   font-weight: 700;
 }
 
@@ -77,6 +77,7 @@
 .app-container {
   padding: 2rem 0;
   font-family: "Inter", sans-serif;
+  background-color: #fff5f8; /* soft background tone */
 }
 
 /* === HEADER === */
@@ -86,13 +87,13 @@
 }
 
 .title {
-  color: #1b5e20;
+  color: #7469b6;
   font-weight: 700;
   margin-bottom: 0.3rem;
 }
 
 .week-range {
-  color: #4caf50;
+  color: #ad88c6;
   font-weight: 500;
   margin-bottom: 1rem;
 }
@@ -106,25 +107,46 @@
 }
 
 .week-button {
-  background-color: #4caf50 !important;
-  color: white !important;
+  background-color: #ad88c6 !important; /* medium purple */
+  color: #fff !important;
   font-weight: 600 !important;
   text-transform: none !important;
   padding: 0.5rem 1.2rem !important;
   border-radius: 10px !important;
   transition: all 0.3s ease !important;
+  box-shadow: 0 3px 8px rgba(173, 136, 198, 0.3) !important;
 }
 
 .week-button:hover {
-  background-color: #388e3c !important;
+  background-color: #7469b6 !important; /* darker violet */
   transform: translateY(-1px);
 }
 
 .week-button.prev {
-  background-color: #81c784 !important;
+  background-color: #e1afd1 !important; /* soft lavender-pink */
+  color: #4b3f72 !important;
 }
 
 .week-button.prev:hover {
-  background-color: #66bb6a !important;
+  background-color: #ad88c6 !important;
+  color: #fff !important;
+}
+
+/* =======================
+   Checkbox Styling (Themed)
+======================= */
+
+.MuiCheckbox-root {
+  color: #AD88C6 !important; /* Unchecked color */
+  transition: all 0.2s ease-in-out;
+}
+
+.MuiCheckbox-root.Mui-checked {
+  color: #7469B6 !important; /* Checked color (main theme) */
+}
+
+.MuiCheckbox-root.Mui-checked:hover {
+  color: #AD88C6 !important; /* Lighter hover tint */
+  background-color: rgba(173, 136, 198, 0.1) !important;
 }
 
