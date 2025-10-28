@@ -30,11 +30,20 @@ const App = () => {
   // Load attendance data for the selected week
   useEffect(() => {
     const weekKey = currentWeek.startOf("week").format("YYYY-MM-DD");
+
+    // 🟣 Try loading from localStorage first
+    const saved = localStorage.getItem(`attendance_${weekKey}`);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setClients(calculateFees(parsed));
+      return;
+    }
+
+    // Otherwise, use existing memory or default reset
     const storedWeek = attendanceByWeek[weekKey];
     if (storedWeek) {
       setClients(calculateFees(storedWeek));
     } else {
-      // Reset attendance for new week
       const resetClients = defaultClients.map((client) => ({
         ...client,
         schedules: client.schedules.map((s) => ({ ...s, attended: false })),
@@ -43,7 +52,7 @@ const App = () => {
     }
   }, [currentWeek, attendanceByWeek]);
 
-  // Toggle attendance for a given client/day
+
   const handleToggleAttendance = (clientId, day) => {
     const updated = clients.map((client) => {
       if (client.id === clientId) {
@@ -57,9 +66,14 @@ const App = () => {
 
     const recalculated = calculateFees(updated);
     const weekKey = currentWeek.startOf("week").format("YYYY-MM-DD");
+
+    // 🟣 Save current week's attendance to localStorage
+    localStorage.setItem(`attendance_${weekKey}`, JSON.stringify(recalculated));
+
     setAttendanceByWeek({ ...attendanceByWeek, [weekKey]: recalculated });
     setClients(recalculated);
   };
+
 
   // Week navigation
   const goToPreviousWeek = () => setCurrentWeek(currentWeek.subtract(1, "week"));
