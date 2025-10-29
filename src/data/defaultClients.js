@@ -86,7 +86,7 @@ const defaultClients = [
   {
     id: 13,
     name: "David",
-    type: "ABA",
+    type: "2IN1",
     schedules: [{ day: "Friday", time: "8am-10am", attended: false }],
   },
 ];
